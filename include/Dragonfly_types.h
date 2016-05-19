@@ -1,5 +1,5 @@
-//#ifndef _DRAGONFLY_TYPES_H_
-//#define _DRAGONFLY_TYPES_H_
+#ifndef _DRAGONFLY_TYPES_H_
+#define _DRAGONFLY_TYPES_H_
 
 // Types used in the Dragonfly system
 
@@ -246,4 +246,4 @@ typedef struct {
 } MDF_TIMING_TEST;
 
 
-//#endif //_DRAGONFLY_TYPES_H_
+#endif //_DRAGONFLY_TYPES_H_
