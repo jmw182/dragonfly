@@ -1,7 +1,7 @@
 PIPE_DIR=PipeLib
 BASE_DIR=../..
 SOURCES=Dragonfly.cpp MyCException.cpp MyCString.cpp $$PIPE_DIR/SocketPipe.cpp $$PIPE_DIR/UPipe.cpp $$PIPE_DIR/Timing.cpp
-;HEADERS=$$BASE_DIR/include/Dragonfly.h $$BASE_DIR/include/MyCException.h $$BASE_DIR/include/MyCString.h $$BASE_DIR/include/internal/UPipe.h
+;HEADERS=$$BASE_DIR/include/Dragonfly.h $$BASE_DIR/include/MyCException.h $$BASE_DIR/include/MyCString.h $$BASE_DIR/include/Timing.h $$BASE_DIR/include/internal/UPipe.h
 INCLUDEPATH += $$BASE_DIR/include $$BASE_DIR/include/internal
 
 
