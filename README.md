@@ -33,7 +33,7 @@ Publications whose experiments utilized Dragonfly Messaging include:
 ## Prerequisites
 
 Bare minimum requirement is that you have a C++ compiler installed. On linux, you also need to have qt4-qmake 
-installed (in a future release, this requirement will be eliminated). If you’d like to have support for other languages, 
+installed (in a future release, this requirement will be eliminated). If you'd like to have support for other languages, 
 see below further requirements:
 
 #### Python
@@ -53,14 +53,14 @@ see below further requirements:
 
 ## Installation
 
-#### Linux
+#### Linux/MacOS
 
 Clone the repository and compile the source as follows:
 
 1. In a terminal execute the following:
 
         cd Dragonfly/build
-        make
+        ./build_with_qmake.sh
 
 2. Create `DRAGONFLY` environment variable and set it to where your Dragonfly folder is
 
