@@ -1,4 +1,4 @@
-function TranslateDragonflyhFiles2Matlab( Dragonfly_BaseDir, MessageDefFile)
+function TranslateDragonflyhFiles2Matlab( Dragonfly_BaseDir, MessageDefFile, OutputFileName)
 % TranslateDragonflyhFiles2Matlab( Dragonfly_BaseDir, MessageDefFile)
 %
 % Translates C header files to Matlab, saves the result in a mat file
@@ -14,7 +14,11 @@ function TranslateDragonflyhFiles2Matlab( Dragonfly_BaseDir, MessageDefFile)
       ConfigFileDir = '.';
     end
 
-    OutputFile = [ConfigFileDir '/' ConfigFileBaseName '.mat'];
+    if exist('OutputFileName','var') && ~isempty(OutputFileName)
+      OutputFile = fullfile(ConfigFileDir,[OutputFileName '.mat']);
+    else
+      OutputFile = fullfile(ConfigFileDir, [ConfigFileBaseName '.mat']);
+    end
     DF = ReadConfigFiles( Dragonfly_BaseDir, MessageDefFile);
     save( OutputFile, 'DF');
 
