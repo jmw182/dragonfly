@@ -1,11 +1,13 @@
 BASE_DIR   = ../..
-SWIG       = swig
+SWIG       = swig # swig executable (add to path or include full path here)
 SYMBOLS    = -DUSE_LINUX
 GCC        = g++
 CPPFLAGS   = -shared -Wall -Wno-deprecated -pthread -fPIC
-LIBS       = -L${BASE_DIR}/lib -lDragonfly
-PY_INC     = /usr/include/python2.7
-PYTHON     = /usr/bin/python
+PY_INC     = $(shell python-config --includes) # generate command to include python header files
+PYTHON     = python # path to python executable (might be unecessary? Some systems may need to reference this var to run H2XML and XML2PY)
+PY_LD_FLAGS := $(shell python-config --ldflags) # generate commands to link to python library files
+LIBS       = -L${BASE_DIR}/lib -lDragonfly # link dragonfly library
+LDFLAGS   += ${LIBS} ${PY_LD_FLAGS}
 INCLUDES   = -I${BASE_DIR}/include -I${BASE_DIR}/include/internal
 H2XML      = h2xml
 XML2PY     = xml2py
@@ -16,7 +18,7 @@ PyDragonfly.py: PyDragonfly.i
 	${SWIG} ${SYMBOLS} ${INCLUDES} -c++ -python PyDragonfly.i
 
 _PyDragonfly.so:  PyDragonfly.py
-	${GCC} ${CPPFLAGS} ${INCLUDES} ${SYMBOLS} -I${PY_INC} ${LIBS} PyDragonfly_wrap.cxx -o _PyDragonfly.so -lpython2.7 -lDragonfly
+	${GCC} ${CPPFLAGS} ${INCLUDES} ${SYMBOLS} ${PY_INC} ${LDFLAGS} PyDragonfly_wrap.cxx -o _PyDragonfly.so -lDragonfly
 
 Dragonfly_types.xml: ${BASE_DIR}/include/Dragonfly_types.h
 	${H2XML} -c -o Dragonfly_types.xml `pwd`/../../include/Dragonfly_types.h
