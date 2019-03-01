@@ -23,7 +23,7 @@ _PyDragonfly.so:  PyDragonfly.py
 	${GCC} ${CPPFLAGS} ${INCLUDES} ${SYMBOLS} ${PY_INC} ${LDFLAGS} PyDragonfly_wrap.cxx -o _PyDragonfly.so -lDragonfly
 
 Dragonfly_types.py: ${BASE_DIR}/include/Dragonfly_types.h
-	${PYTHON} ${CLANG2PY} -c -o Dragonfly_types.py `pwd`/../../include/Dragonfly_types.h
+	${PYTHON} ${CLANG2PY} -c -k cdefmstu -o Dragonfly_types.py `pwd`/../../include/Dragonfly_types.h
 
 clean:
 	rm -f *.so
