@@ -35,7 +35,18 @@ class CMessage
 {
 public:
 
-	DF_MSG_HEADER_FIELDS;
+	MSG_TYPE	msg_type; // previously DF_MSG_HEADER_FIELDS; (changed for python compatibility)
+	MSG_COUNT	msg_count;
+	double	send_time;
+	double	recv_time;
+	HOST_ID		src_host_id;
+	MODULE_ID	src_mod_id;
+	HOST_ID		dest_host_id;
+	MODULE_ID	dest_mod_id;
+	int			num_data_bytes;
+	int			remaining_bytes;
+	int			is_dynamic;
+	int			reserved;
 	char data[MAX_CONTIGUOUS_MESSAGE_DATA];
 	char *large_data;
 
