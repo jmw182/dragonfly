@@ -1,8 +1,8 @@
 #!/usr/bin/python
 from __future__ import print_function
 import time
-import PyDragonfly
-from PyDragonfly import copy_from_msg, copy_to_msg, MT_EXIT, MT_KILL
+import PyDragonfly3 as PyDragonfly
+from PyDragonfly3 import copy_from_msg, copy_to_msg, MT_EXIT, MT_KILL
 import message_defs as mdefs
 import sys
 
