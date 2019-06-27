@@ -70,6 +70,8 @@ Clone the repository and compile the source as follows:
 
 4. Copy `Dragonfly/lib/libDragonfly.so` to `/usr/lib` (or another directory on library search path) or add `Dragonfly/lib` to `LD_LIBRARY_PATH`
 (See set_env_vars.sh in `tools' folder for reference)
+    *  On older versions of MacOS, setting DYLD_LIBRARY_PATH may work. On recent versions of Mac (>= El Capitan), this no longer works due to System Integrity Protection (SIP). Instead, the .so file can be moved, copied, or symlinked via the `ln` command (e.g. `ln -s /path/to/original /path/to/link`) to standard library locations (~/lib, /usr/lib, or /usr/local/lib).
+    * Installing the library with a symlink (`ln -s`) to /usr/local/lib works well on Linux as well. You will likely need to run `sudo ldconfig` after linking the library so that the system recongnizes it.
 
 5. If you plan to use the matlab interface, start matlab and execute the following:
 
