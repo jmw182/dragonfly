@@ -3,6 +3,7 @@
 *.pdb
 *.ncb 
 *.suo
+*.sdf
 *.user
 *.pch
 *.log
@@ -26,6 +27,10 @@
 *.so
 *.so.*
 obj/*
+.vs/
+*.VC.db
+*.VC.VC.opendb
+CMakeLists.txt.user
 Debug/
 Release/
 examples/cs/*/obj/*
