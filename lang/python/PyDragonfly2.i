@@ -5,10 +5,10 @@
 // Emrah Diril 05/01/2013
 
 %define DOCSTRING
-"Python interface to the University of Pittsburgh Motor Control Lab's Dragonfly messaging system."
+"Python2 interface to the University of Pittsburgh Motor Control Lab's Dragonfly messaging system."
 %enddef
 
-%module(docstring=DOCSTRING) PyDragonfly
+%module(docstring=DOCSTRING) PyDragonfly2
 %feature("autodoc", "1");
 %{
 
@@ -56,4 +56,3 @@
 //%include "carrays.i"
 //%array_class(int, MSG_TYPE_ARRAY)
 //%array_class(double, DoubleArray)
-
