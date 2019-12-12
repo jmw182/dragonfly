@@ -3,7 +3,7 @@
 // that they may be imported into Python.
 // Andrew S. Whitford 06/09
 
-%module Dragonfly_Definitions
+%module Dragonfly_Definitions2
 %{
 #include "../../include/Dragonfly_types.h"
 %}
@@ -15,4 +15,4 @@
 %array_class(double, DoubleArray)
 %array_class(unsigned char, UcharArray)
 
-//swig -includeall -c++ -python dragonfly.i
+//swig -includeall -c++ -python dragonfly2.i
