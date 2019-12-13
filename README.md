@@ -1,14 +1,14 @@
-## Introduction
+# Introduction
 
 Dragonfly is a simple messaging system that helps programmers create modular distributed 
 applications rapidly. It hides the complexities of socket programming and data translation, also provides a uniform 
-high-level API in each of the supported programming languages (C++, C#, Python, Matlab) 
-and operating systems (Windows, Linux). Therefore, programmers are able to write each part of 
+high-level API in each of the supported programming languages (C++, Python, Matlab, C#) 
+and operating systems (Windows, Linux, MacOS). Therefore, programmers are able to write each part of 
 their application in their programming language of choice and on their operating system of choice 
 without having to worry about how the modules will communicate with each other.
 
 Dragonfly consists of several components: a central message exchange daemon (MessageManager), 
-a data logger daemon (Logger), and utilities to create message definitions in all supported programming languages.
+a data logger daemon (QuickLogger), and utilities to create message definitions in all supported programming languages.
 
 Dragonfly uses a client-server architecture where MessageManager is the central server and software 
 modules that would like to talk to each other are the clients. MessageManager keeps a listening socket for modules 
@@ -20,7 +20,7 @@ The modules remain independent of each other and do not have to know which modul
 where the messages they consume originate.
 
 
-## History
+# History
 
 Dragonfly was first developed, under the name Real-Time Messaging Architecture (RTMA), by Meel Velliste and Sagi Perel
 for use in the development of brain-computer interface development.
@@ -30,30 +30,36 @@ Publications whose experiments utilized Dragonfly Messaging include:
 - Clanton, S. T., McMorland, A. J. C., Zohny, Z., Jeffries, S. M., Rasmussen, R. G., Flesher, S. N., & Velliste, M. (2013). **Seven Degree of Freedom Cortical Control of a Robotic Arm.** In C. Guger, B. Z. Allison, & G. Edlinger (Eds.), Brain-Computer Interface Research (pp. 73-81). Berlin, Heidelberg: Springer Berlin Heidelberg. doi:10.1007/978-3-642-36083-1
 - Collinger, J. L., Wodlinger, B., Downey, J. E., Wang, W., Tyler-Kabara, E. C., Weber, D. J., McMorland, A. J. C., Velliste, M., Boninger, M. L., Schwartz, A. B. (2012). **High-performance neuroprosthetic control by an individual with tetraplegia.** The Lancet. doi:10.1016/S0140-6736(12)61816-9
 
-## Prerequisites
+# Prerequisites
 
-Bare minimum requirement is that you have a C++ compiler installed. On linux, you also need to have qt4-qmake 
-installed (in a future release, this requirement will be eliminated). If you’d like to have support for other languages, 
+Bare minimum requirement is that you have a C++ compiler installed. On Linux, you also need to have qt4-qmake 
+installed (in a future release, this requirement will be eliminated). If you would like to have support for other languages, 
 see below further requirements:
 
-#### Python
-- Version >= 2.6 (python3 is currently not supported)
-- Install swig >= 2.0.3 (on windows, make sure `swig.exe` is in PATH)
-- Install ctypeslib 
-  * Linux: `sudo apt-get install python-ctypeslib`
-  * Windows: Download from http://code.google.com/p/ctypesgen 
+## Python
+- 3.7 (required), 2.7 (optional)
+- Install swig >= 2.0.3
+  * Windows: Add `swig.exe` to PATH
+- Install ctypeslib2 using pip in Python 3.7 environment 
+  * `pip install ctypeslib2`
+- Install clang using pip in Python 3.7 environment
+  * `pip install clang`
+- Install LLVM Clang 
+  * Windows: Download pre-built binary from [here](https://releases.llvm.org/download.html)
+  * Linux: Install through a package manager or download pre-built binary from [here](https://releases.llvm.org/download.html)
+  * MacOS: Install XCode command line tools (Clang is the default compiler on modern Macs)
 
-#### C&#35;
-- Windows only, Visual Studio 2005 or later
-
-#### Matlab 
+## Matlab 
 - Version >= 2007b
 - Configure Matlab to recognize the Visual Studio C++ compiler
 
+## C&#35;
+- Windows only, Visual Studio 2019
 
-## Installation
 
-#### Linux
+# Installation
+
+## Linux
 
 Clone the repository and compile the source as follows:
 
@@ -78,22 +84,28 @@ Clone the repository and compile the source as follows:
 (See set_env_vars.sh in `tools' folder for reference)
         
 
-#### Windows
+## Windows
 
 We recommend that you use the installer provided in the [binaries repo](https://github.com/dragonfly-msg/binaries/blob/master/dragonfly_windows_setup.exe?raw=true) 
 which contains ready-to-use executables and will also set the necessary environment variables automatically.
 
 If you'd like to compile from source, clone the repository and follow these instructions:
 
-1. Build `Dragonfly/build/Dragonfly.sln` with Visual Studio (2005 or later)
+### Build
+1. Build `Dragonfly\build\Dragonfly.sln` with Visual Studio 2019 in Release x86 configuration
 
-2. Create `DRAGONFLY` environment variable and set it to where your Dragonfly folder is
+2. Create `DRAGONFLY` environment variable and set it to the root Dragonfly directory (ex: C:\GIT\rnel-dragonfly)
 
-3. If you plan to use the python interface, 
- * Set `PYTHON_LIB` environment variable (ex: C:\Python27\libs)
- * Set `PYTHON_INCLUDE` environment variable (ex: C:\Python27\include)
- * Build `Dragonfly/lang/python/PyDragonfly.sln` with Visual Studio (2005 or later)
+3. If you plan to use the python interface
+ * Set `PYTHON2_BASE` environment to the root Python 2.7 directory (ex: C:\Python27)
+ * Set `PYTHON2_INCLUDE` environment to the root Python 2.7 directory (ex: C:\Python27\include)
+ * Set `PYTHON2_LIB` environment to the root Python 2.7 directory (ex: C:\Python27\libs)
+ * Set `PYTHON3_BASE` environment to the root Python 3.7 directory (ex: C:\Python37)
+ * Set `PYTHON3_INCLUDE` environment to the root Python 3.7 directory (ex: C:\Python37\include)
+ * Set `PYTHON3_LIB` environment to the root Python 3.7 directory (ex: C:\Python37\libs)
+ * Build `Dragonfly\lang\python\PyDragonfly.sln` with Visual Studio 2019 in Release x86 configuration
  * Add `%DRAGONFLY%\lang\python` to `PYTHONPATH` environment variable
+ * Add the directory of any custom message definition files to the `PYTHONPATH` environment variable
 	
 4. If you plan to use the Matlab interface, start matlab and execute the following:
     	
@@ -103,7 +115,7 @@ If you'd like to compile from source, clone the repository and follow these inst
         make
 
 
-## Directory Organization
+# Directory Organization
 - `bin`    
     executable modules
 - `build`    
@@ -122,7 +134,7 @@ If you'd like to compile from source, clone the repository and follow these inst
     scripts for creating installers and generating message definition files
 
 
-## API Summary
+# API Summary
 - ConnectToMMM(ModuleID, ServerAddress)
 - DisconnectFromMMM()
 - Subscribe(MessageType)
@@ -132,12 +144,12 @@ If you'd like to compile from source, clone the repository and follow these inst
 - SendSignal(MessageType)
 
 
-## Example Code
+# Example Code
 `Dragonfly/examples` folder contains ready to run modules in all supported languages. See the README.txt file 
 in each example folder for further information.
 
 
-## Creating Message Definitions
+# Creating Message Definitions
 Dragonfly uses standard C header files to describe message definitions.
 
 Each message consists of a message type and an optional message body. 
@@ -192,16 +204,14 @@ with the appropriate build script for your language. The build scripts are locat
 Python build script is written in python. Matlab and C&#35; build scripts require Matlab. (In a future release, dependency on 
 Matlab will be eliminated)
 
-#### Matlab
-
-        build_matlab_message_defs(path_to_message_definition_header_file)
-
-#### C&#35;
-        
-        build_dotNet_message_defs(path_to_message_definition_header_file)
-
-#### Python
+## Python
     
         build_python_message_defs(path_to_message_definition_header_file)
 
+## Matlab
 
+        build_matlab_message_defs(path_to_message_definition_header_file)
+
+## C&#35;
+        
+        build_dotNet_message_defs(path_to_message_definition_header_file)
