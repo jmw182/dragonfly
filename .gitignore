@@ -21,6 +21,8 @@
 *.dll
 *.mex*
 *.asv
+*.htm
+.DS_Store
 *~
 *#*#
 *.so
@@ -28,6 +30,7 @@
 obj/*
 Debug/
 Release/
+.vs/
 examples/cs/*/obj/*
 examples/cpp/CppModule
 lang/python/PyDragonfly.py
