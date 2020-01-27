@@ -16,7 +16,7 @@ CFLAGS   = -pipe -g -Wall -W -O2 -D_REENTRANT -fPIC  -DUSE_LINUX
 CXXFLAGS = -pipe -g -Wall -W -O2 -D_REENTRANT -fPIC  -DUSE_LINUX
 LEXFLAGS = 
 YACCFLAGS= -d
-INCPATH  = -I/usr/share/qt4/mkspecs/default -I. -I../../include -I../../include/internal -I.ui/
+INCPATH  = -I. -I../../include -I../../include/internal -I.ui/ #-I/usr/share/qt4/mkspecs/default 
 LINK     = g++
 LFLAGS   = -shared -Wl,-soname,libDragonfly.so.1
 LIBS     = $(SUBLIBS)  -lpthread
@@ -124,7 +124,7 @@ uicables: $(UICDECLS) $(UICIMPLS)
 $(MOC): 
 	( cd $(QTDIR)/src/moc && $(MAKE) )
 
-Makefile: Dragonfly.pro  /usr/share/qt4/mkspecs/default/qmake.conf 
+Makefile: Dragonfly.pro  # /usr/share/qt4/mkspecs/default/qmake.conf 
 	$(QMAKE) -o Makefile Dragonfly.pro
 qmake: 
 	@$(QMAKE) -o Makefile Dragonfly.pro
