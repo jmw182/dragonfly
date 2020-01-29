@@ -27,10 +27,12 @@
 *#*#
 *.so
 *.so.*
+.vs/
 obj/*
+**/.qmake.stash
 Debug/
 Release/
-.vs/
+bin/
 examples/cs/*/obj/*
 examples/cpp/CppModule
 lang/python/PyDragonfly.py
