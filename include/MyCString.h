@@ -66,8 +66,6 @@ void itoa(unsigned int number, char* buf, int radix);
 /*
  * String class to be used within the exceptions instead of regular chars
  */
-class MyCString;
-
 class MyCString
 {
 private:
