@@ -22,6 +22,7 @@
 *.mex*
 *.asv
 *.htm
+**/Makefile
 .DS_Store
 *~
 *#*#
