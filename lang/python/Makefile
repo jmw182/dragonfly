@@ -17,7 +17,7 @@ LDFLAGS_PY3   	+= ${LIBS} ${PY3_LD_FLAGS}
 INCLUDES   		= -I${BASE_DIR}/include -I${BASE_DIR}/include/internal # Dragonfly includes
 CLANG2PY   		= /usr/local/lib/python3.7/site-packages/ctypeslib/clang2py.py
 
-all:  _PyDragonfly2.so _PyDragonfly3.so Dragonfly_types.py
+all:  _PyDragonfly2.so _PyDragonfly3.so
 
 PyDragonfly2.py: PyDragonfly2.i
 	${SWIG} ${SYMBOLS} ${INCLUDES} -c++ -python PyDragonfly2.i
@@ -31,13 +31,8 @@ _PyDragonfly2.so:  PyDragonfly2.py
 _PyDragonfly3.so:  PyDragonfly3.py
 	${GCC} ${CPPFLAGS} ${INCLUDES} ${SYMBOLS} -I${PY3_INC} ${LDFLAGS_PY3} PyDragonfly3_wrap.cxx -o _PyDragonfly3.so
 
-Dragonfly_types.py: ${BASE_DIR}/include/Dragonfly_types.h
-	${PYTHON3} ${CLANG2PY} -c -k cdefmstu -o Dragonfly_types.py `pwd`/../../include/Dragonfly_types.h
-
 clean:
 	rm -f *.so
 	rm -f *.cxx
 	rm -f PyDragonfly{2,3}.py
 	rm -f *.pyc
-	rm -f Dragonfly_types.xml
-	rm -f Dragonfly_types.py
