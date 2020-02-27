@@ -84,14 +84,14 @@ which contains ready-to-use executables and will also set the necessary environm
 
 If you'd like to compile from source, clone the repository and follow these instructions:
 
-1. Build `Dragonfly/build/Dragonfly.sln` with Visual Studio (2005 or later)
+1. Build `Dragonfly/build/Dragonfly.sln` with Visual Studio
 
 2. Create `DRAGONFLY` environment variable and set it to where your Dragonfly folder is
 
 3. If you plan to use the python interface, 
  * Set `PYTHON_LIB` environment variable (ex: C:\Python27\libs)
  * Set `PYTHON_INCLUDE` environment variable (ex: C:\Python27\include)
- * Build `Dragonfly/lang/python/PyDragonfly.sln` with Visual Studio (2005 or later)
+ * Build `Dragonfly/lang/python/PyDragonfly.sln` with Visual Studio
  * Add `%DRAGONFLY%\lang\python` to `PYTHONPATH` environment variable
 	
 4. If you plan to use the Matlab interface, start matlab and execute the following:
