@@ -13,11 +13,11 @@ function DF = ReadConfigFiles( Dragonfly_BaseDir, varargin)
 
     % If Dragonfly base directory provided, then add core definition file to the list
     if( ~isempty( Dragonfly_BaseDir))
-        FilePaths(end+1) = {[Dragonfly_BaseDir '/include/Dragonfly_types.h']};
+        FilePaths(end+1) = {fullfile(Dragonfly_BaseDir, 'include,', 'Dragonfly_types.h')};
     end
 
     % Add user defined files to the list
-    FilePaths = [FilePaths InputFilenames];
+    FilePaths = [InputFilenames FilePaths];
     
     % Parse the file list
     h = ParseHFile( FilePaths{:});
