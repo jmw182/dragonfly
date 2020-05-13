@@ -11,9 +11,9 @@ function Unsubscribe( varargin)
         MessageTypeNumber = MessageTypeID_from_String( MessageType);
 
         status = MatlabDragonfly( DF.mex_opcode.UNSUBSCRIBE, MessageTypeNumber);
-        if( status == 0) error( 'Unsubscribe mex-function failed'); end
+        if( status == 0); error( 'Unsubscribe mex-function failed'); end
         
         % Remove the record from the subscribed message-types list
-        idx = strmatch( MessageType, Dragonfly_runtime.Subscribed, 'exact');
+        idx = strcmp( MessageType, Dragonfly_runtime.Subscribed);
         Dragonfly_runtime.Subscribed(idx,:) = [];
     end
