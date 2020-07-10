@@ -1,4 +1,4 @@
-function Log = LoadRawMessageLog( Filename, DF)
+function Log = LoadRawMessageLog( Filename, DF, ignore_type_list)
 
 % Log = LoadRawMessageLog( Filename, DF)
 %
@@ -17,6 +17,25 @@ READ_HEADERS        = 3;
 READ_DATA_BLOCK     = 4;
 GET_NUM_BYTES       = 5;
 
+% handle ignore types
+if ~exist('ignore_type_list','var')
+    ignore_type_list = {};
+elseif ischar('ignore_type_list')
+    ignore_type_list = {ignore_type_list};
+end
+get_full_log = isempty(ignore_type_list);
+if ~get_full_log
+     ignorenums = [];
+     badentries = cellfun(@isempty,DF.MTN_by_MT);
+     badentries = find(~badentries);
+     for a = 1:length(ignore_type_list)
+        t = find(ismember(DF.MTN_by_MT(badentries),ignore_type_list{a}));
+        if ~isempty(t)
+            ignorenums(end+1) = badentries(t)-1;
+        end
+     end
+ end
+
 
 % Load file
 if( ~ischar( Filename))
@@ -34,6 +53,13 @@ try
     for i = 1 : NumMessages
         % Get data template for current message
         H = Log.Headers(i);
+
+        if ~get_full_log %IGNORE LARGE FIELDS WE DON'T OFTEN NEED
+            if any(H.msg_type==ignorenums)
+                continue;
+            end
+        end
+
         if( H.msg_type+1 > length( DF.MDF_by_MT))
             DataTemplate = {};
         else
@@ -43,7 +69,7 @@ try
         % If the message has a data format defined, but the actual message has no data, then issue a warning (this means that
         % a message that has been defined with data was actually sent as a signal)
         if( NumDataBytes == 0 && ~isempty( DataTemplate))
-            if( ischar( DataTemplate) && strmatch( 'VARIABLE_LENGTH_ARRAY', DataTemplate))
+            if( ischar( DataTemplate) && strcmp( 'VARIABLE_LENGTH_ARRAY', DataTemplate))
                 % Variable length arrays are allowed to have no data
                 % without warning
             else
