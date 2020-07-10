@@ -3,6 +3,7 @@
  *
  *  Meel Velliste 10/28/2008
  *  Emrah Diril  10/14/2011
+ * Jeff Weiss: 09/10/2014 (merged HST RTMA (v2.00) with updates from Dragonfly v2.10)
  */
 
 #include "MessageManager.h"
@@ -43,6 +44,20 @@ CMessageManager::CMessageManager( )
 {
 	m_Version = "2.10";
 	m_NextDynamicModIdOffset = 0;
+
+	// from RP3 RTMA (for timing message)
+  #ifdef __unix__ 
+    ftime(&timebuffer);
+  #else
+    _ftime(&timebuffer); // C4996
+  #endif
+
+  m_LastMessageCount = timebuffer.time;
+  m_LastMessageCountmsec = timebuffer.millitm;
+  for(int i=0;i<MAX_MESSAGE_TYPES;i++)
+    m_MessageCounts[i] = (unsigned short)0;
+  for(int i=0;i<MAX_MODULES;i++)
+    m_ModulePIDs[i] = 0;
 }
 
 CMessageManager::~CMessageManager( )
@@ -59,11 +74,11 @@ CMessageManager::MainLoop( char *cmd_line_options)
 		// Elevate process priority
 #ifdef _WINDOWS_C
 		BOOL success = SetPriorityClass( GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
-		if( success) printf("Yay!\n");
-		else printf("Too bad!\n");
+		//if( success) printf("Yay!\n");
+		//else printf("Too bad!\n");
 		success = SetThreadPriority( GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
-		if( success) printf("Yay!\n");
-		else printf("Too bad!\n");
+		//if( success) printf("Yay!\n");
+		//else printf("Too bad!\n");
 #endif
 		// Start managing messages
 		if (strlen( cmd_line_options) > 0) {
@@ -136,6 +151,31 @@ CMessageManager::ProcessMessage( CMessage *M, UPipe *pSourcePipe)
 	bool is_valid_mod_id    = ((mod_id > 0) && (mod_id < MAX_MODULES)) ? 1 : 0;
 	bool message_from_this_host = (M->src_host_id == HID_LOCAL_HOST) ? 1 : 0;
 
+	//For keeping track of message timing:
+  if (M->msg_type>0 && M->msg_type<MAX_MESSAGE_TYPES)
+    m_MessageCounts[M->msg_type]++;
+
+  #ifdef __unix__
+    ftime(&timebuffer); // C4996
+  #else
+    _ftime(&timebuffer); // C4996
+  #endif
+	
+  time_t t = timebuffer.time;
+  unsigned short tmsec = timebuffer.millitm;
+
+  if ((t-m_LastMessageCount)>1 || (tmsec-m_LastMessageCountmsec)>900) //time to send out message with timing info
+  {
+    SendMessageTiming();
+    #ifdef __unix__
+      ftime(&timebuffer); // C4996
+    #else
+      _ftime(&timebuffer); // C4996
+    #endif
+
+    m_LastMessageCount = timebuffer.time;
+    m_LastMessageCountmsec = timebuffer.millitm;
+  }
 
 	switch( M->msg_type) {
 
@@ -163,7 +203,8 @@ CMessageManager::ProcessMessage( CMessage *M, UPipe *pSourcePipe)
 				err +=  "]";
 				CMessage R(MT_MM_ERROR, (void*)err.GetContent(), err.GetLen());
 				DispatchMessage(&R);
-			}else{
+			}
+			else{
 				MyCString info("MM forcing disconnect on module [");
 				info += (int)mod_id;
 				info +=  "]";
@@ -172,11 +213,19 @@ CMessageManager::ProcessMessage( CMessage *M, UPipe *pSourcePipe)
 				ShutdownModule(mod_id);
 			}
 			break;
+
 		case MT_DISCONNECT:
 			prev_priority_class = GetMyPriority();
 			SetMyPriority(NORMAL_PRIORITY_CLASS);
 			DisconnectModule( mod_id);
 			SetMyPriority(prev_priority_class);
+			break;
+
+		case MT_MODULE_READY: //store pids so that application module can kill processes later
+			MDF_MODULE_READY m;
+			M->GetData(&m);
+			if (mod_id>=0 && mod_id<MAX_MODULES)
+				m_ModulePIDs[mod_id] = m.pid;
 			break;
 
 		case MT_SUBSCRIBE:
@@ -714,4 +763,37 @@ CMessageManager::LogFailedMessage( CMessage *M, MODULE_ID mod_id)
 	memcpy( &data.msg_header, M, sizeof(DF_MSG_HEADER));
 	CMessage F(MT_FAILED_MESSAGE, &data, sizeof(data));
 	DispatchMessage(&F);
+	
+	m_MessageCounts[MT_FAILED_MESSAGE]++;
+}
+
+void
+CMessageManager::SendMessageTiming()
+{
+	MDF_TIMING_MESSAGE data;
+	memset( &data, 0, sizeof(data));
+	data.send_time = GetAbsTime();
+	for (int i=0;i<MAX_MESSAGE_TYPES;i++)
+	{
+		data.timing[i] = m_MessageCounts[i];
+		m_MessageCounts[i] = 0;
+	}
+
+	//add IsConnected stuff here
+        #ifdef __unix__
+          data.ModulePID[0] = getpid(); //MM
+        #else
+          data.ModulePID[0] = _getpid(); //MM
+        #endif
+	for (int i=1; i<MAX_MODULES; i++)
+	{
+		if (ModuleIsConnected(i))
+			data.ModulePID[i] = m_ModulePIDs[i];
+		else
+			data.ModulePID[i] = 0;
+	}
+
+	CMessage F(MT_TIMING_MESSAGE, &data, sizeof(data));
+	DispatchMessage(&F);
+
 }

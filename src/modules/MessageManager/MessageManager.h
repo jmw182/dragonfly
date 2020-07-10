@@ -3,6 +3,8 @@
 
 #include "Dragonfly.h"
 #include "bit_operations.h"
+#include <sys/timeb.h>
+#include <time.h>
 #include "Debug.h"
 
 #ifdef _UNIX_C
@@ -234,7 +236,16 @@ private:
 	CSubscriberList m_SubscribersToMessageType[MAX_MESSAGE_TYPES];
 	CSubscriberList m_EmptySubscriberList;
 	MyCString       m_Version;
-
+	unsigned short  m_MessageCounts[MAX_MESSAGE_TYPES];
+	int				m_ModulePIDs[MAX_MODULES];
+	time_t  m_LastMessageCount;
+	unsigned short  m_LastMessageCountmsec;
+        #ifdef __unix__
+            struct timeb timebuffer;
+        #else
+            struct _timeb   timebuffer;
+        #endif
+		
 	MODULE_ID GetDynamicModuleId()
 	{
 		for(MODULE_ID id=0; id < (MAX_MODULES - DYN_MOD_ID_START); id++)
@@ -252,6 +263,10 @@ private:
 		DEBUG_TEXT("CMessageBuffer::GetDynamicModuleId(): All dynamic IDs are in use");
 		return 0;
 	}
+
+	void
+	SendMessageTiming();
+	// Sends timing information to subscribed modules and resets the counter
 	
 	void
 	HandleData( UPipe *pClientPipe);
