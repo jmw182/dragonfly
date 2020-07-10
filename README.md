@@ -32,28 +32,27 @@ Publications whose experiments utilized Dragonfly Messaging include:
 
 ## Prerequisites
 
-Bare minimum requirement is that you have a C++ compiler installed. On linux, you also need to have qt4-qmake 
-installed (in a future release, this requirement will be eliminated). If you’d like to have support for other languages, 
-see below further requirements:
+Bare minimum requirement is that you have a C++ compiler installed. On linux and OSX, you also need to have qt4-qmake 
+installed. If you’d like to have support for other languages, see below further requirements:
 
 #### Python
-- Version >= 2.6 (python3 is currently not supported)
-- Install swig >= 2.0.3 (on windows, make sure `swig.exe` is in PATH)
+- Version >= 2.6 (python3 support coming soon)
+- Install swig >= 3.0.12 (on windows, make sure `swig.exe` is in PATH)
 - Install ctypeslib 
   * Linux: `sudo apt-get install python-ctypeslib`
   * Windows: Download from http://code.google.com/p/ctypesgen 
 
 #### C&#35;
-- Windows only, Visual Studio 2005 or later
+- Windows only
+- Visual Studio 2019 Community Edition or later
 
 #### Matlab 
-- Version >= 2007b
 - Configure Matlab to recognize the Visual Studio C++ compiler
 
 
 ## Installation
 
-#### Linux
+#### Linux/OSX
 
 Clone the repository and compile the source as follows:
 
@@ -85,14 +84,14 @@ which contains ready-to-use executables and will also set the necessary environm
 
 If you'd like to compile from source, clone the repository and follow these instructions:
 
-1. Build `Dragonfly/build/Dragonfly.sln` with Visual Studio (2005 or later)
+1. Build `Dragonfly/build/Dragonfly.sln` with Visual Studio
 
 2. Create `DRAGONFLY` environment variable and set it to where your Dragonfly folder is
 
 3. If you plan to use the python interface, 
  * Set `PYTHON_LIB` environment variable (ex: C:\Python27\libs)
  * Set `PYTHON_INCLUDE` environment variable (ex: C:\Python27\include)
- * Build `Dragonfly/lang/python/PyDragonfly.sln` with Visual Studio (2005 or later)
+ * Build `Dragonfly/lang/python/PyDragonfly.sln` with Visual Studio
  * Add `%DRAGONFLY%\lang\python` to `PYTHONPATH` environment variable
 	
 4. If you plan to use the Matlab interface, start matlab and execute the following:

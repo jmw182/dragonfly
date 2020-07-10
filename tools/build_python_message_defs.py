@@ -15,14 +15,10 @@ if __name__ == "__main__":
     filename_root, filename_ext = os.path.splitext(filename)
     
     os_name = platform.system()
-    if os_name == "Linux":
-        xml_file = os.path.join(base_dir, filename_root) + '.xml'
-        sp.call(['h2xml', '-c', '-o', xml_file, input_file])
-        out_file = os.path.join(base_dir, filename_root) + '.py'
-        sp.call(['xml2py', '-o', out_file, xml_file])
-
-    elif os_name == "Windows":
+    output_file = filename_root + '.py'
+    if os_name == "Windows":
         ctypesgen_path = os.environ['CTYPESGEN'] + '\ctypesgen.py'
-        output_file = filename_root + '.py'
         sp.call(['python', ctypesgen_path, '--includedir="../include"', '-a', '-o', output_file, input_file])
+    else:
+        sp.call(['ctypesgen', '--includedir="../include"', '-a', '-o', output_file, input_file])
         
