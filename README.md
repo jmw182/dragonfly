@@ -32,25 +32,30 @@ Publications whose experiments utilized Dragonfly Messaging include:
 
 ## Prerequisites
 
-Bare minimum requirement is that you have a C++ compiler installed. On linux/mac, you also need to have qt-qmake (from qt4 or qt5)
+Bare minimum requirement is that you have a C++ compiler installed. On linux and MacOS, you also need to have qt-qmake (from qt4 or qt5)
 installed (in a future release, this requirement may be eliminated). If you'd like to have support for other languages, 
 see below further requirements:
 
 #### Python
 - Version >= 2.6 (python3 is now supported)
-- Install swig >= 2.0.3 (make sure `swig` is on PATH. Latest SWIG 4.0 works.) (http://www.swig.org/download.html)
+- Install swig >= 3.0.12 (make sure `swig` is on PATH. Latest SWIG 4.0 works.) (http://www.swig.org/download.html)
+- There are two options for converting Dragonfly message definitions (defined in .h files) to Python: using ctypeslib2 or ctypesgen pip packages
+1. The ctypeslib2 method outputs shorter, cleaner .py files, but it depends on the LLVM Clang compiler (default on MacOS, available for download on Linux and Windows) and Clang python bindings.
 - Install LLVM-Clang compiler
   - Windows/Linux: http://releases.llvm.org/download.html
   - MacOS: Install XCode command line tools (Clang is default compiler on modern Macs)
 - Install Clang and ctypeslib2 python packages
 	`pip install clang` and `pip install ctypeslib2`
-- Previously a package called "ctypesgen" was used instead of clang/ctypeslib2. This has recently been updated to support Python3 and can be used as an alternative to clang/ctypeslib2 if there are any issues with clang/ctypeslib2. This package can be found on GitHub.
+2. The ctypesgen package depends on either GCC or LLVM Clang compilers (on Windows install MinGW GCC. LLVM Clang for Windows may also work, but has not been tested.)
+        - Install gcc (MinGW on Windows) or Clang if needed
+        - `pip install ctypesgen`
+- Select your preferred dependency by setting the PARSER constant in tools/build_python_message_defs.py
 
 #### C&#35;
-- Windows only, Visual Studio 2005 or later
+- Windows only
+- Visual Studio 2019 Community Edition or later
 
 #### Matlab 
-- Version >= 2007b
 - Configure Matlab to recognize the Visual Studio C++ compiler
 
 
