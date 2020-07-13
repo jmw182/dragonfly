@@ -15,7 +15,7 @@ function ResumeSubscription( varargin)
         if( status == 0), error( 'ResumeSubscription mex-function failed'); end
 
         % Remove the record from the paused subscriptions list
-        idx = strmatch( MessageType, Dragonfly_runtime.Paused, 'exact');
+        idx = strcmp( MessageType, Dragonfly_runtime.Paused);
         Dragonfly_runtime.Paused(idx,:) = [];
         
     end

@@ -37,7 +37,7 @@
 	#ifndef MSG_NOSIGNAL 
         # define MSG_NOSIGNAL 0
     # ifdef SO_NOSIGPIPE
-        #  define RTMA_USE_SO_NOSIGPIPE
+        #  define DF_USE_SO_NOSIGPIPE
     # else
         #  error "Cannot block SIGPIPE!"
     # endif

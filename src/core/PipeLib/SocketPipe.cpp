@@ -505,7 +505,7 @@ SocketPipeServer::SocketPipeServer( char *host_addr, short port_no)
 					throw UPipeException( "Could not set socket option SO_LINGER");
 				}
 
-				#ifdef RTMA_USE_SO_NOSIGPIPE // for Mac OS X, solution from: https://nwat.xyz/blog/2014/01/16/porting-msg_more-and-msg_nosigpipe-to-osx/
+				#ifdef DF_USE_SO_NOSIGPIPE // for Mac OS X, solution from: https://nwat.xyz/blog/2014/01/16/porting-msg_more-and-msg_nosigpipe-to-osx/
 						int val = 1;
 						status = setsockopt(_hListeningSocket.id, SOL_SOCKET, SO_NOSIGPIPE, (void*)&val, sizeof(val));
 						if ( status < 0) {

@@ -1,5 +1,5 @@
-//#ifndef _DRAGONFLY_TYPES_H_
-//#define _DRAGONFLY_TYPES_H_
+#ifndef _DRAGONFLY_TYPES_H_
+#define _DRAGONFLY_TYPES_H_
 
 // Types used in the Dragonfly system
 
@@ -22,19 +22,21 @@ typedef int MSG_COUNT;
 #define MAX_DRAGONFLY_MODULE_ID  9 // Module ID-s below 10 are reserved for Dragonfly core
 
 // Header fields for all messages passed through Dragonfly
-#define DF_MSG_HEADER_FIELDS \
-	MSG_TYPE	msg_type; \
-	MSG_COUNT	msg_count; \
-	double	send_time; \
-	double	recv_time; \
-	HOST_ID		src_host_id; \
-	MODULE_ID	src_mod_id; \
-	HOST_ID		dest_host_id; \
-	MODULE_ID	dest_mod_id; \
-	int			num_data_bytes; \
-	int			remaining_bytes; \
-	int			is_dynamic; \
-	int			reserved
+// Following macro was commented out for compatibility with ctypesgen2 v2.2.2 python package (used for Python3 compatiblity) 
+// All references to this macro in this file and in Dragonfly.h were replaced with actual values
+//#define DF_MSG_HEADER_FIELDS
+	// MSG_TYPE	msg_type;
+	// MSG_COUNT	msg_count;
+	// double	send_time;
+	// double	recv_time;
+	// HOST_ID		src_host_id;
+	// MODULE_ID	src_mod_id;
+	// HOST_ID		dest_host_id;
+	// MODULE_ID	dest_mod_id;
+	// int			num_data_bytes;
+	// int			remaining_bytes;
+	// int			is_dynamic;
+	// int			reserved
 // msg_type - Message type ID
 // msg_count - Source message count (per source, starting from 1)
 // send_time - Time at source when message sent (Seconds since 0:00:00 on Jan 1, 1970)
@@ -52,13 +54,35 @@ typedef int MSG_COUNT;
 
 // Header for messages passed through Dragonfly
 typedef struct {
-	DF_MSG_HEADER_FIELDS;
+	MSG_TYPE	msg_type; // previously DF_MSG_HEADER_FIELDS; (changed for python compatibility)
+	MSG_COUNT	msg_count;
+	double	send_time;
+	double	recv_time;
+	HOST_ID		src_host_id;
+	MODULE_ID	src_mod_id;
+	HOST_ID		dest_host_id;
+	MODULE_ID	dest_mod_id;
+	int			num_data_bytes;
+	int			remaining_bytes;
+	int			is_dynamic;
+	int			reserved;
 } DF_MSG_HEADER;
 
 #define MAX_CONTIGUOUS_MESSAGE_DATA 9000
 
 typedef struct {
-	DF_MSG_HEADER_FIELDS;
+	MSG_TYPE	msg_type; // previously DF_MSG_HEADER_FIELDS; (changed for python compatibility)
+	MSG_COUNT	msg_count;
+	double	send_time;
+	double	recv_time;
+	HOST_ID		src_host_id;
+	MODULE_ID	src_mod_id;
+	HOST_ID		dest_host_id;
+	MODULE_ID	dest_mod_id;
+	int			num_data_bytes;
+	int			remaining_bytes;
+	int			is_dynamic;
+	int			reserved;
 	char data[MAX_CONTIGUOUS_MESSAGE_DATA];
 } DF_MESSAGE;
 
@@ -245,5 +269,11 @@ typedef struct {
   double time[MAX_TIMING_TEST_TIME_POINTS];
 } MDF_TIMING_TEST;
 
+#define MT_TIMING_MESSAGE		80
+typedef struct {
+	unsigned short timing[MAX_MESSAGE_TYPES];
+	int ModulePID[MAX_MODULES]; //0 if not connected
+	double send_time;
+} MDF_TIMING_MESSAGE;
 
-//#endif //_DRAGONFLY_TYPES_H_
+#endif //_DRAGONFLY_TYPES_H_
