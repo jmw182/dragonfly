@@ -32,16 +32,19 @@ Publications whose experiments utilized Dragonfly Messaging include:
 
 ## Prerequisites
 
-Bare minimum requirement is that you have a C++ compiler installed. On linux, you also need to have qt4-qmake 
-installed (in a future release, this requirement will be eliminated). If you’d like to have support for other languages, 
+Bare minimum requirement is that you have a C++ compiler installed. On linux/mac, you also need to have qt-qmake (from qt4 or qt5)
+installed (in a future release, this requirement may be eliminated). If you'd like to have support for other languages, 
 see below further requirements:
 
 #### Python
-- Version >= 2.6 (python3 is currently not supported)
-- Install swig >= 2.0.3 (on windows, make sure `swig.exe` is in PATH)
-- Install ctypeslib 
-  * Linux: `sudo apt-get install python-ctypeslib`
-  * Windows: Download from http://code.google.com/p/ctypesgen 
+- Version >= 2.6 (python3 is now supported)
+- Install swig >= 2.0.3 (make sure `swig` is on PATH. Latest SWIG 4.0 works.) (http://www.swig.org/download.html)
+- Install LLVM-Clang compiler
+  - Windows/Linux: http://releases.llvm.org/download.html
+  - MacOS: Install XCode command line tools (Clang is default compiler on modern Macs)
+- Install Clang and ctypeslib2 python packages
+	`pip install clang` and `pip install ctypeslib2`
+- Previously a package called "ctypesgen" was used instead of clang/ctypeslib2. This has recently been updated to support Python3 and can be used as an alternative to clang/ctypeslib2 if there are any issues with clang/ctypeslib2. This package can be found on GitHub.
 
 #### C&#35;
 - Windows only, Visual Studio 2005 or later
@@ -53,28 +56,32 @@ see below further requirements:
 
 ## Installation
 
-#### Linux
+#### Linux/MacOS
 
 Clone the repository and compile the source as follows:
 
-1. In a terminal execute the following:
+1. If planning to use the python interface, the makefile in `RTMA/lang/python` may need to be manually edited to correctly set variables (i.e. point to the correct python install location)
+   
+2. In a terminal execute the following:
 
         cd Dragonfly/build
-        make
+        ./build_with_qmake.sh
 
-2. Create `DRAGONFLY` environment variable and set it to where your Dragonfly folder is
+3. Create `DRAGONFLY` environment variable and set it to where your Dragonfly folder is
 
-3. Copy `Dragonfly/lib/libDragonfly.so` to `/usr/lib` or add `Dragonfly/lib` to `LD_LIBRARY_PATH`
+4. Copy `Dragonfly/lib/libDragonfly.so` to `/usr/lib` (or another directory on library search path) or add `Dragonfly/lib` to `LD_LIBRARY_PATH`
 (See set_env_vars.sh in `tools' folder for reference)
+    *  On older versions of MacOS, setting DYLD_LIBRARY_PATH may work. On recent versions of Mac (>= El Capitan), this no longer works due to System Integrity Protection (SIP). Instead, the .so file can be moved, copied, or symlinked via the `ln` command (e.g. `ln -s /path/to/original /path/to/link`) to standard library locations (~/lib, /usr/lib, or /usr/local/lib).
+    * Installing the library with a symlink (`ln -s`) to /usr/local/lib works well on Linux as well. You will likely need to run `sudo ldconfig` after linking the library so that the system recongnizes it.
 
-4. If you plan to use the matlab interface, start matlab and execute the following:
+5. If you plan to use the matlab interface, start matlab and execute the following:
 
         cd Dragonfly/lang/matlab
         make
         cd Dragonfly/src/utils/LogReader
         make
 
-5. If you plan to use the python interface, append `Dragonfly/lang/python` to `PYTHONPATH` environment variable 
+6. If you plan to use the python interface, append `$Dragonfly/lang/python` to `PYTHONPATH` environment variable 
 (See set_env_vars.sh in `tools' folder for reference)
         
 
@@ -85,21 +92,22 @@ which contains ready-to-use executables and will also set the necessary environm
 
 If you'd like to compile from source, clone the repository and follow these instructions:
 
-1. Build `Dragonfly/build/Dragonfly.sln` with Visual Studio (2005 or later)
+1. Build `Dragonfly\build\Dragonfly.sln` with Visual Studio (2005 or later)
 
 2. Create `DRAGONFLY` environment variable and set it to where your Dragonfly folder is
 
-3. If you plan to use the python interface, 
- * Set `PYTHON_LIB` environment variable (ex: C:\Python27\libs)
- * Set `PYTHON_INCLUDE` environment variable (ex: C:\Python27\include)
- * Build `Dragonfly/lang/python/PyDragonfly.sln` with Visual Studio (2005 or later)
- * Add `%DRAGONFLY%\lang\python` to `PYTHONPATH` environment variable
+3. If you plan to use the python 2/3 interfaces, 
+    * Set `PYTHON2_BASE` and `PYTHON3_BASE` environment variables to respective python 2 and 3 install locations (e.g. C:\Python\Anaconda3 and C:\Python\Anaconda3\envs\py27)
+    * Set `PYTHON2_LIB` and `PYTHON3_LIB` environment variables (ex: %PYTHON3_BASE%\libs)
+    * Set `PYTHON2_INCLUDE` and `PYTHON3_INCLUDE` environment variables (ex: %PYTHON3_BASE%\include)
+    * Build `Dragonfly\lang\python\PyDragonfly.sln` with Visual Studio (tested with VS 2019)
+    * Add `%Dragonfly%\lang\python` to `PYTHONPATH` environment variable
 	
 4. If you plan to use the Matlab interface, start matlab and execute the following:
     	
-        cd Dragonfly/lang/matlab
+        cd Dragonfly\lang\matlab
         make
-        cd Dragonfly/src/utils/LogReader
+        cd Dragonfly\src\utils\LogReader
         make
 
 
@@ -133,7 +141,7 @@ If you'd like to compile from source, clone the repository and follow these inst
 
 
 ## Example Code
-`Dragonfly/examples` folder contains ready to run modules in all supported languages. See the README.txt file 
+`Dragonfly\examples` folder contains ready to run modules in all supported languages. See the README.txt file 
 in each example folder for further information.
 
 

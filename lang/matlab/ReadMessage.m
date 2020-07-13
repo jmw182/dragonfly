@@ -12,7 +12,7 @@ function Message = ReadMessage( arg)
 
 global DF;
 
-if( ~exist( 'arg', 'var'))
+if( nargin < 1)
     timeout = -1; % Blocking call
     blocking = true;
 else
@@ -51,7 +51,7 @@ else
        Message.data = MatlabDragonfly( DF.mex_opcode.READ_MESSAGE_DD);
     elseif( Message.num_data_bytes > 0)
         DataTemplate = GetMDF_by_MT( Message.msg_type);
-        if( ischar( DataTemplate) & strmatch( 'VARIABLE_LENGTH_ARRAY', DataTemplate))
+        if( ischar( DataTemplate) & strncmp( 'VARIABLE_LENGTH_ARRAY', DataTemplate, 21))
             Message.data = DataTemplate;
         else
             %try

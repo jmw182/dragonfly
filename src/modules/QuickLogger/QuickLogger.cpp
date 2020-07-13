@@ -5,6 +5,7 @@
  *  Emrah Diril  05/04/2012
  */
 #include "QuickLogger.h"
+#include <ctime>
 
 CQuickLogger QL;
 
@@ -91,10 +92,15 @@ void CQuickLogger::MainFunction( char *cmd_line_options)
 				//Status( (MyCString) "Received Message (msg_type = " + M.msg_type + ")");
 				bool saved = _MessageBufrr.SaveMessage( &M);
 				if( !saved) {
-					Status( "Message buffer was full, saving log to QuickLoggerDump.bin");
-					_MessageBufrr.SaveDatafile( "QuickLoggerDump.bin");
+					//Status( "Message buffer was full, saving log to QuickLoggerDump.bin");
+					//_MessageBufrr.SaveDatafile( "QuickLoggerDump.bin");
+					// TODO: revert to the version that saves dump files, but update executive to pause logging during intertrial. Dump files should only save if buffer unexpectedly fills during trial.
+					//Status( (MyCString) "\nMessage buffer full, dumping to file");
+					//AutoDumpBuffer(); // Commented out to stop saving dump files between trials. There is a risk that data could be lost if buffer overflows during a trial.
+					Status( (MyCString) "\nMessage buffer full, resetting buffer. Data may be lost if not in intertrial!");
 					_MessageBufrr.ClearBuffer( );
-					Status( "Log saved, message buffer has been reset");
+					//Status( "Log saved, message buffer has been reset");
+					Status( "Message buffer has been reset");
 					// Save the message again to the now cleared buffer
 					_MessageBufrr.SaveMessage( &M);
 				}
@@ -122,11 +128,15 @@ void CQuickLogger::MainFunction( char *cmd_line_options)
 						_MessageBufrr.ClearBuffer( );
 						break;
 					case MT_DUMP_MESSAGE_LOG:
-						Status( "Dumping message log to QuickLoggerDump.bin");
-						_MessageBufrr.SaveDatafile( "QuickLoggerDump.bin");
+						//Status( "Dumping message log to QuickLoggerDump.bin");
+						Status( "Dumping message log");
+						//_MessageBufrr.SaveDatafile( "QuickLoggerDump.bin");
+						AutoDumpBuffer();
 						break;
 					case MT_LM_EXIT:
-						_MessageBufrr.SaveDatafile( "QuickLoggerDump.bin");
+						//_MessageBufrr.SaveDatafile( "QuickLoggerDump.bin");
+						Status( "Auto dumping and Exiting");
+						AutoDumpBuffer();
 						return;
 					default:
 						break;
@@ -150,8 +160,60 @@ void CQuickLogger::MainFunction( char *cmd_line_options)
 void CQuickLogger::Status(const MyCString& msg)
 {
 	TRY {
-		//std::cout << msg.GetContent() << std::endl;
+		time_t ltime;
+		struct tm *tm;
+		// output timestamp right before it start saving the data in the buffer
+		ltime = time(NULL);
+		tm = localtime(&ltime);
+		char t_str[16];
+		std::strftime(t_str,sizeof(t_str),"%I:%M:%S",tm);
+		std::cout << t_str << " " << msg.GetContent() << std::endl;
+		//std::cout << tm->tm_hour << ":" << tm->tm_min << ":" << tm->tm_sec << "    " << msg.GetContent() << std::endl;
 		CMessage S( MT_DEBUG_TEXT, msg.GetContent(), msg.GetLen());
 		SendMessage( &S);
 	} CATCH_and_THROW( "void CQuickLogger::Status(const MyCString& msg)");
 }
+
+void CQuickLogger::DumpBuffer( char *Filename)
+{
+  TRY {
+    time_t ltime;
+    struct tm *tm;
+    // output timestamp right before it start saving the data in the buffer
+    ltime = time(NULL);
+    tm = localtime(&ltime);
+    printf("Dumping buffer to %s\n",Filename);
+    printf("Starting Buffer Dump (%d-%d-%d %d:%d:%d)\n", tm->tm_year+1900, tm->tm_mon+1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec);
+    _MessageBufrr.SaveDatafile( Filename );
+    printf("Buffer Dump Done (%d-%d-%d %d:%d:%d)\n", tm->tm_year+1900, tm->tm_mon+1, tm->tm_mday, tm->tm_hour, tm->tm_min, tm->tm_sec);
+    Status( (MyCString) "Saved Data to '" + Filename + "':");
+    Status( (MyCString) "    Num messages: " + _MessageBufrr.GetNumMessages());
+    Status( (MyCString) "    Num data bytes: " + _MessageBufrr.GetNumDataBytes());
+  } CATCH_and_THROW( "void DumpBuffer( char Filename[MAX_LOGGER_FILENAME_LENGTH+1])")
+}
+
+void CQuickLogger::AutoDumpBuffer()
+{
+  TRY {
+    char Filename[MAX_LOGGER_FILENAME_LENGTH+1];
+    time_t ltime;
+    struct tm *tm;
+
+    // get current time
+    ltime=time(NULL);
+    tm=localtime(&ltime);
+
+    // define dump file name : QuickLogger.Dump.<ts>,bin
+    sprintf( \
+      Filename, \
+      "QuickLogger.Dump.%04d%02d%02d%02d%02d%02d.bin", \
+      tm->tm_year+1900, \
+      tm->tm_mon+1, \
+      tm->tm_mday, \
+      tm->tm_hour, \
+      tm->tm_min, \
+      tm->tm_sec);
+    printf("Auto Dumping Buffer to %s\n", Filename );
+    DumpBuffer(Filename);
+  } CATCH_and_THROW( "void AutoDumpBuffer()")
+} 

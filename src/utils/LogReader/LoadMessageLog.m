@@ -1,4 +1,4 @@
-function Log = LoadMessageLog( Filename, DF)
+function Log = LoadMessageLog( Filename, DF, ignore_type_list)
 
 % Log = LoadMessageLog( Filename, DF)
 %
@@ -10,5 +10,9 @@ function Log = LoadMessageLog( Filename, DF)
 
 % Meel Velliste 12/29/2008
 
-RawLog = LoadRawMessageLog( Filename, DF);
+if ~exist('ignore_type_list', 'var')
+    ignore_type_list = {};
+end
+
+RawLog = LoadRawMessageLog( Filename, DF, ignore_type_list);
 Log = OrganizeLogByMsgType( RawLog, DF);

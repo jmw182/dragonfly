@@ -1,4 +1,4 @@
-function [BigLog, IncrState] = LoadMessageLogs( DirName, FileNames, DF, IncrState)
+function [BigLog, IncrState] = LoadMessageLogs( DirName, FileNames, DF, IncrState, ignore_type_list)
 
 % BigLog = LoadMessageLogs( DirName, FileNames, DF)
 %
@@ -11,6 +11,10 @@ function [BigLog, IncrState] = LoadMessageLogs( DirName, FileNames, DF, IncrStat
 
 % Meel Velliste 12/29/2008
 % Emrah Diril  10/14/2011
+
+if ~exist('ignore_type_list', 'var')
+    ignore_type_list = {};
+end
 
 	% make the function backwards compatible
     if (nargin < 4)
@@ -36,7 +40,7 @@ function [BigLog, IncrState] = LoadMessageLogs( DirName, FileNames, DF, IncrStat
         % Load message log from the binary file
         input_file = FileNames{i};
         input_file_path = [DirName '/' input_file];
-        Log = LoadMessageLog( input_file_path, DF);
+        Log = LoadMessageLog( input_file_path, DF, ignore_type_list);
         % Offset message sequence numbers so that they form one continuous
         % sequence in the concatenated log (instead of starting over from 1
         % for each file)

@@ -13,11 +13,11 @@ function DF = ReadConfigFiles( Dragonfly_BaseDir, varargin)
 
     % If Dragonfly base directory provided, then add core definition file to the list
     if( ~isempty( Dragonfly_BaseDir))
-        FilePaths(end+1) = {[Dragonfly_BaseDir '/include/Dragonfly_types.h']};
+        FilePaths(end+1) = {fullfile(Dragonfly_BaseDir, 'include,', 'Dragonfly_types.h')};
     end
 
     % Add user defined files to the list
-    FilePaths = [FilePaths InputFilenames];
+    FilePaths = [InputFilenames FilePaths];
     
     % Parse the file list
     h = ParseHFile( FilePaths{:});
@@ -47,7 +47,7 @@ function DF = ReadConfigFiles( Dragonfly_BaseDir, varargin)
     message_names = fieldnames( DF.MT);
     for i = 1 : length( message_names)
         message_name = message_names{i};
-        message_type_id = getfield( DF.MT, message_name);
+        message_type_id = DF.MT.(message_name);
         DF.MTN_by_MT{message_type_id+1,1} = message_name;
     end
 
@@ -60,8 +60,8 @@ function DF = ReadConfigFiles( Dragonfly_BaseDir, varargin)
         if( ~isfield( DF.MT, message_name))
             error( ['MDF_' message_name ' does not have a matching MT_' message_name ' defined']);
         end
-        message_type_id = getfield( DF.MT, message_name);
-        DF.MDF_by_MT{message_type_id+1,1} = getfield( DF.MDF, message_name);
+        message_type_id = DF.MT.(message_name);
+        DF.MDF_by_MT{message_type_id+1,1} = DF.MDF.(message_name);
     end
 
     % If Dragonfly base directory provided, then parse mex op-code definition file
@@ -85,7 +85,7 @@ function DF = ExtractFields( fields, DF)
         name = names{n};
         [prefix, remainder] = strtok( name, '_');
         realname = remainder( 2:end);
-        value = getfield( fields, name);
+        value = fields.(name);
 
         % Check that HID, MID and MT fields are integer values
         switch( prefix)
@@ -97,11 +97,8 @@ function DF = ExtractFields( fields, DF)
 
         % Put the fields and their values in the appropriate fields of the Dragonfly
         % structure
-        switch( prefix)
-            case 'HID', DF.HID = setfield( DF.HID, realname, value);
-            case 'MID', DF.MID = setfield( DF.MID, realname, value);
-            case 'MT', DF.MT = setfield( DF.MT, realname, value);
-            case 'MDF', DF.MDF = setfield( DF.MDF, realname, value);
+        if (any(strcmp(prefix,{'HID','MID','MT','MDF'})))
+            DF.(prefix).(realname) = value; 
         end
     end
 
@@ -127,7 +124,7 @@ function CheckNumericIDs( Struct)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function CheckDupes( Struct)
 
-    Names = fieldnames( Struct);
+    %Names = fieldnames( Struct);
     ValuesCell = struct2cell( Struct);
     Values = [ValuesCell{:}];
     UniqueValues = unique( Values);
@@ -135,7 +132,7 @@ function CheckDupes( Struct)
     NumUnique = length( UniqueValues);
     if( NumValues ~= NumUnique)
         sortedValues = sort(Values);
-        idx = find(diff(sortedValues) == 0);
+        idx = diff(sortedValues) == 0; %find(diff(sortedValues) == 0);
         error([ 'Duplicate message type ID-s found: ' num2str(sortedValues(idx)) ]);
     end
     

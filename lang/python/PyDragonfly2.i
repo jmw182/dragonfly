@@ -8,7 +8,7 @@
 "Python interface to the University of Pittsburgh Motor Control Lab's Dragonfly messaging system."
 %enddef
 
-%module(docstring=DOCSTRING) PyDragonfly
+%module(docstring=DOCSTRING) PyDragonfly2
 %feature("autodoc", "1");
 %{
 
