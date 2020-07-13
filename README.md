@@ -41,14 +41,14 @@ see below further requirements:
 - Install swig >= 3.0.12 (make sure `swig` is on PATH. Latest SWIG 4.0 works.) (http://www.swig.org/download.html)
 - There are two options for converting Dragonfly message definitions (defined in .h files) to Python: using ctypeslib2 or ctypesgen pip packages
 1. The ctypeslib2 method outputs shorter, cleaner .py files, but it depends on the LLVM Clang compiler (default on MacOS, available for download on Linux and Windows) and Clang python bindings.
-- Install LLVM-Clang compiler
-  - Windows/Linux: http://releases.llvm.org/download.html
-  - MacOS: Install XCode command line tools (Clang is default compiler on modern Macs)
-- Install Clang and ctypeslib2 python packages
-	`pip install clang` and `pip install ctypeslib2`
+    - Install LLVM-Clang compiler
+      - Windows/Linux: http://releases.llvm.org/download.html
+      - MacOS: Install XCode command line tools (Clang is default compiler on modern Macs)
+    - Install Clang and ctypeslib2 python packages
+        `pip install clang` and `pip install ctypeslib2`
 2. The ctypesgen package depends on either GCC or LLVM Clang compilers (on Windows install MinGW GCC. LLVM Clang for Windows may also work, but has not been tested.)
-        - Install gcc (MinGW on Windows) or Clang if needed
-        - `pip install ctypesgen`
+    - Install gcc (MinGW on Windows) or Clang if needed
+    - `pip install ctypesgen`
 - Select your preferred dependency by setting the PARSER constant in tools/build_python_message_defs.py
 
 #### C&#35;
