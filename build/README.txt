@@ -6,9 +6,9 @@ select the "Release" configuration and run Build All. This will build
 the C++ API (lib/Dragonfly.lib), the .NET API (lang/dot_net/Dragonfly.NET.dll), 
 and the executable modules (bin/MessageManager.exe and bin/QuickLogger.exe).
 
-On Linux, make sure you have qmake installed in addition to regular make,
-the run "make" within this build directory. This will build the C++ API
-(lib/libDragonfly.so), the Python API (lang/python/PyDragonfly.?), and the
+On Linux or MacOS, make sure you have qmake installed in addition to regular make,
+the run "./build_with_qmake.sh" within this build directory. This will build the C++ API
+(lib/libDragonfly.so or lib/libDragonfly.dylib), the Python API (lang/python/PyDragonfly3.py), and the
 executable modules (bin/MessageManager and bin/QuickLogger).
 
 The Matlab API needs to be compiled separately by starting matlab, changing current
