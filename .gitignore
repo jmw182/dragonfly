@@ -7,6 +7,8 @@
 *.pch
 *.metagen
 *.log
+*.tlog
+*.lastbuildstate
 *.lib
 *.obj
 *.ncb
@@ -39,7 +41,7 @@ bin/
 examples/cs/*/obj/*
 examples/cpp/CppModule
 lang/python/PyDragonfly*.py
-lang/python/PyDragonfly_wrap*.cxx
+*_wrap.cxx
 lang/python/Dragonfly_Definitions.py
 lang/python/dragonfly_wrap.cxx
 examples/python/*/message_defs.py
