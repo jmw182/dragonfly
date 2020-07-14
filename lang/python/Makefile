@@ -34,13 +34,6 @@ _PyDragonfly2.so:  PyDragonfly2.py
 
 Dragonfly_types.py: ${BASE_DIR}/include/Dragonfly_types.h
 	${PYTHON} `pwd`/../../tools/build_python_message_defs.py `pwd`/../../include/Dragonfly_types.h `pwd`/Dragonfly_types.py
-#ifeq ($(H_PARSER), H_CTYPESGEN)
-#	${PYTHON} ${CTYPESGEN} `pwd`/../../include/Dragonfly_types.h -a -o Dragonfly_types.py
-#else ifeq ($(H_PARSER), H_CTYPESLIB)
-#	${PYTHON} ${CLANG2PY} -c -k cdefmstu -o Dragonfly_types.py `pwd`/../../include/Dragonfly_types.h
-#else
-#	$(info    H_PARSER is $(H_PARSER))
-#endif
 
 clean:
 	rm -f *.so
