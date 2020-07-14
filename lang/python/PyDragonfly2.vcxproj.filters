@@ -15,11 +15,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PyDragonfly_wrap.cxx">
+    <ClCompile Include="PyDragonfly3_wrap.cxx">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="PyDragonfly.i" />
+    <CustomBuild Include="PyDragonfly3.i" />
   </ItemGroup>
 </Project>

@@ -9,24 +9,26 @@
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
+    <ProjectConfiguration Include="Py3Release|Win32">
+      <Configuration>Py3Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|x64">
-      <Configuration>Release</Configuration>
+    <ProjectConfiguration Include="Py3Release|x64">
+      <Configuration>Py3Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{588AAB6A-C3D8-481C-8467-DDB52D0FF8DA}</ProjectGuid>
+    <ProjectName>PyDragonfly3</ProjectName>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Py3Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Py3Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
@@ -41,10 +43,10 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Py3Release|Win32'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Py3Release|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
@@ -60,62 +62,84 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(ProjectDir)</OutDir>
     <IntDir>$(Configuration)\</IntDir>
+    <TargetName>_$(ProjectName)</TargetName>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <TargetName>_$(ProjectName)</TargetName>
     <OutDir>$(ProjectDir)</OutDir>
     <IntDir>$(Configuration)\</IntDir>
+    <TargetExt>.pyd</TargetExt>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Py3Release|Win32'">
+    <OutDir>$(ProjectDir)</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <TargetName>_$(ProjectName)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Py3Release|x64'">
+    <TargetName>_$(ProjectName)</TargetName>
+    <OutDir>$(ProjectDir)</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <TargetExt>.pyd</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../include;../../src/core;$(PYTHON_INCLUDE);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include;$(PYTHON3_INCLUDE)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>../../src/core/Dragonflyd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>../../lib/Dragonflyd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)_$(ProjectName).pyd</OutputFile>
-      <AdditionalLibraryDirectories>$(LIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ImportLibrary>$(TargetDir)/Debug/PyDragonfly.lib</ImportLibrary>
+      <AdditionalLibraryDirectories>$(PYTHON3_LIB)</AdditionalLibraryDirectories>
+      <ImportLibrary>$(TargetDir)/Debug/PyDragonfly2.lib</ImportLibrary>
     </Link>
+    <PostBuildEvent>
+      <Command>del $(ProjectDir)*.exp</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>../../include;../../src/core;$(PYTHON_INCLUDE);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include;$(PYTHON3_INCLUDE)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <AdditionalDependencies>../../src/core/Dragonflyd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)_$(ProjectName).pyd</OutputFile>
-      <AdditionalLibraryDirectories>$(LIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ImportLibrary>$(TargetDir)/Debug/PyDragonfly.lib</ImportLibrary>
+      <AdditionalLibraryDirectories>$(PYTHON3_LIB)</AdditionalLibraryDirectories>
+      <ImportLibrary>$(TargetDir)/Debug/PyDragonfly2.lib</ImportLibrary>
     </Link>
+    <PostBuildEvent>
+      <Command>del $(ProjectDir)*.exp</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Py3Release|Win32'">
     <CustomBuildStep>
       <Message>why?</Message>
     </CustomBuildStep>
     <ClCompile>
-      <AdditionalIncludeDirectories>../../include;../../src/core;$(PYTHON_INCLUDE);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include;$(PYTHON3_INCLUDE)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>../../src/core/Dragonfly.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>../../lib/Dragonfly.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)_$(ProjectName).pyd</OutputFile>
-      <AdditionalLibraryDirectories>$(PYTHON_LIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(PYTHON3_LIB)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>del $(ProjectDir)*.exp</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Py3Release|x64'">
     <CustomBuildStep>
       <Message>why?</Message>
     </CustomBuildStep>
     <ClCompile>
-      <AdditionalIncludeDirectories>../../include;../../src/core;$(PYTHON_INCLUDE);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../include;$(PYTHON3_INCLUDE)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>../../src/core/Dragonfly.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>../../lib/Dragonfly.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)_$(ProjectName).pyd</OutputFile>
-      <AdditionalLibraryDirectories>$(PYTHON_LIB);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(PYTHON3_LIB)</AdditionalLibraryDirectories>
     </Link>
     <CustomBuild>
       <Command>
@@ -125,40 +149,22 @@
       <Outputs>
       </Outputs>
     </CustomBuild>
+    <PostBuildEvent>
+      <Command>del $(ProjectDir)*.exp</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="PyDragonfly_wrap.cxx" />
+    <ClCompile Include="PyDragonfly3_wrap.cxx" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="PyDragonfly.i">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">echo In order to function correctly, please ensure the following environment variables are correctly set:
-echo PYTHON_INCLUDE: %25PYTHON_INCLUDE%25
-echo PYTHON_LIB: %25PYTHON_LIB%25
+    <CustomBuild Include="PyDragonfly3.i">
+      <FileType>Document</FileType>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Py3Release|x64'">echo In order to function correctly, please ensure the following environment variables are correctly set:
+echo PYTHON3_INCLUDE: %PYTHON3_INCLUDE%
+echo PYTHON3_LIB: %PYTHON3_LIB%
 echo on
-swig -c++ -python -I../../include -I../../include/internal "%(FullPath)"
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">echo In order to function correctly, please ensure the following environment variables are correctly set:
-echo PYTHON_INCLUDE: %25PYTHON_INCLUDE%25
-echo PYTHON_LIB: %25PYTHON_LIB%25
-echo on
-swig -c++ -python -I../../include -I../../include/internal "%(FullPath)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename)_wrap.cxx;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename)_wrap.cxx;%(Outputs)</Outputs>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">echo In order to function correctly, please ensure the following environment variables are correctly set:
-echo PYTHON_INCLUDE: %25PYTHON_INCLUDE%25
-echo PYTHON_LIB: %25PYTHON_LIB%25
-echo on
-swig -c++ -python -I../../include -I../../include/internal "%(FullPath)"
-</Command>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">echo In order to function correctly, please ensure the following environment variables are correctly set:
-echo PYTHON_INCLUDE: %PYTHON_INCLUDE%
-echo PYTHON_LIB: %PYTHON_LIB%
-echo on
-swig -c++ -python -I../../include -I../../include/internal "%(FullPath)"
-</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename)_wrap.cxx;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename)_wrap.cxx;%(Outputs)</Outputs>
+swig -c++ -python -I../../include -I../../include/internal "%(FullPath)"</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Py3Release|x64'">%(Filename)_wrap.cxx</Outputs>
     </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
