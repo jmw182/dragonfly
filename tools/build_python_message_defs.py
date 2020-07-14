@@ -14,7 +14,7 @@ elif PARSER == 'ctypesgen':
 if __name__ == "__main__":
     parser = ArgumentParser(description = "Converts C header files to python files")
     parser.add_argument(type=str, dest='input_file')
-    parser.add_argument(type=str, dest="output_file", default=None)
+    parser.add_argument(type=str, dest="output_file", default=None, nargs='?')
     args = parser.parse_args()
     print("Processing %s ..." % (args.input_file))
 
