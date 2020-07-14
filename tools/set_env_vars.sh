@@ -1,7 +1,11 @@
-export DRAGONFLY=/home/vr/rp3/tmp/Dragonfly
+# Determine where Dragonfly is installed
+THIS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DRAGONFLY_DIR=$( dirname "${THIS_DIR}")
+
+export DRAGONFLY=${DRAGONFLY_DIR}
 
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${DRAGONFLY}/lib
 
-export PYTHONPATH=${DRAGONFLY}/lang/python
+export PYTHONPATH=${PYTHONPATH}:${DRAGONFLY}/lang/python
 
-export PATH=$PATH:${DRAGONFLY}/tools
+export PATH=${PATH}:${DRAGONFLY}/tools
