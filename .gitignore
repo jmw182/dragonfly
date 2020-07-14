@@ -28,6 +28,8 @@
 *#*#
 *.so
 *.so.*
+*.dylib
+*.dylib.*
 .vs/
 obj/*
 **/.qmake.stash
@@ -36,7 +38,8 @@ Release/
 bin/
 examples/cs/*/obj/*
 examples/cpp/CppModule
-lang/python/PyDragonfly.py
-lang/python/PyDragonfly_wrap.cxx
+lang/python/PyDragonfly*.py
+lang/python/PyDragonfly_wrap*.cxx
 lang/python/Dragonfly_Definitions.py
 lang/python/dragonfly_wrap.cxx
+examples/python/*/message_defs.py
